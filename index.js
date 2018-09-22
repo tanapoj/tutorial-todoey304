@@ -8,7 +8,7 @@ app.use(session({ secret: 'nwen304-project1-part2', cookie: { maxAge: 60 * 60 * 
 
 //pg
 const Pg = require('pg')
-const pgClient = new Pg.Client("postgres://postgres:1234@localhost:5432/postgres")
+const pgClient = new Pg.Client("postgres://gsbbqformgfmwr:4778df7f7f155cf0e24db813cabc75b93e5f71d86c2504bb7b46bc9a6c1f11c5@ec2-54-83-29-34.compute-1.amazonaws.com:5432/d5e397ahqcv3kr?ssl=true")
 pgClient.connect()
 
 //ejs template
@@ -59,6 +59,9 @@ app.get('/login', (req, res) => {
 })
 app.post('/login', async (req, res) => {
     let {username, password} = req.body
+
+    console.log(username, password)
+
     let {rows} = await pgClient.query(
         'select * from "Users" where username ilike $1 and password=$2', 
         [username, md5(password)]
@@ -236,7 +239,7 @@ app.post('/api/task/:taskid/remove', async (req, res) => {
 
 
 
-
-app.listen(3000, () => {
+const PORT = process.env.PORT || 8000
+app.listen(PORT, () => {
     console.log('node started!!!!!!!!!!')
 })
